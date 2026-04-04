@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQ Questionário - Quociente do Espectro do Autismo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: #f5f3ef;
+            min-height: 100vh;
+            color: #1a1a2e;
+        }
+        
+        .root {
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .welcome, .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        
+        .card {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        
+        .welcome-inner {
+            text-align: center;
+            max-width: 480px;
+        }
+        
+        .logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            color: #c9a96e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin: 0 auto 2rem;
+            letter-spacing: 2px;
+        }
+        
+        h1, h2 {
+            color: #1a1a2e;
+            font-weight: normal;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; }
+        
+        .subtitle, .note {
+            color: #555;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        .note {
+            color: #888;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        
+        input {
+            width: 100%;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-family: Georgia, serif;
+            background: #fff;
+            color: #1a1a2e;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+        
+        .btn {
+            background: #1a1a2e;
+            color: #c9a96e;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 36px;
+            font-size: 1rem;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            font-family: Georgia, serif;
+            transition: opacity 0.2s;
+            display: inline-block;
+        }
+        
+        .btn:hover { opacity: 0.8; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-danger { background: #e05c5c; }
+        .btn-small { padding: 6px 16px; font-size: 0.8rem; }
+        .ghost-btn { background: none; border: 1px solid #ccc; color: #aaa; padding: 6px 16px; border-radius: 20px; }
+        
+        .top-bar {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 24px;
+        }
+        
+        .progress-track {
+            height: 4px;
+            background: #e0ddd8;
+            border-radius: 2px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #c9a96e;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.8rem;
+            color: #aaa;
+            text-align: right;
+            display: block;
+        }
+        
+        .q-number {
+            font-size: 0.75rem;
+            color: #c9a96e;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .q-text {
+            font-size: 1.1rem;
+            color: #1a1a2e;
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+        
+        .option-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-btn {
+            width: 100%;
+            background: #faf9f7;
+            border: 1.5px solid #e8e5e0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #333;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            transition: all 0.15s;
+        }
+        
+        .option-btn:hover { background: #f0ede8; }
+        .option-btn.selected { background: #1a1a2e; color: #c9a96e; border-color: #1a1a2e; }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            margin: 0 auto 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .score-num { font-size: 2.4rem; color: #c9a96e; font-weight: bold; }
+        .score-label { font-size: 0.75rem; color: #888; letter-spacing: 1px; }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .result-name { font-size: 1.1rem; margin-bottom: 12px; color: #333; }
+        .result-text { color: #555; line-height: 1.7; margin-bottom: 12px; }
+        .result-note { font-size: 0.9rem; font-style: italic; }
+        
+        .message {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .message.success { background: #d4edda; color: #155724; }
+        .message.error { background: #f8d7da; color: #721c24; }
+        .message.info { background: #d1ecf1; color: #0c5460; }
+        
+        .admin-link {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .admin-input {
+            width: 160px;
+            margin: 0;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0;
+            font-family: Georgia, serif;
+            margin-top: 20px;
+        }
+        
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            background: #f5f3ef;
+            border-radius: 12px;
+            padding: 14px 8px;
+            text-align: center;
+        }
+        
+        .stat-num {
+            display: block;
+            font-size: 1.8rem;
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        
+        .stat-lbl {
+            display: block;
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
+        }
+        
+        .resp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .resp-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #faf9f7;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+        
+        .resp-row:hover { background: #f5f3ef; }
+        
+        .resp-name { font-weight: bold; color: #1a1a2e; font-size: 0.95rem; }
+        .resp-date { color: #aaa; font-size: 0.78rem; margin-top: 2px; }
+        .resp-score { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        
+        .detail-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            border-radius: 6px;
+            padding: 6px 8px;
+        }
+        
+        .detail-num { color: #c9a96e; font-weight: bold; min-width: 24px; font-size: 0.85rem; margin-top: 2px; }
+        .detail-text { flex: 1; font-size: 0.82rem; color: #444; line-height: 1.4; }
+        .detail-ans { font-size: 0.78rem; min-width: 120px; text-align: right; }
+        .dot { color: #d4800a; font-size: 0.7rem; margin-top: 3px; }
+        
+        @media print {
+            body { background: white; color: black; }
+            .root, .page, .card { box-shadow: none !important; background: white !important; }
+            .btn, .back-btn, .ghost-btn, .admin-link { display: none !important; }
+            .score-circle { box-shadow: none; }
+            .detail-grid { max-height: none; overflow: visible; }
+            .page { padding: 0; }
+            .card { margin: 0; border-radius: 0; }
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        
+        .fade-in { animation: fadeIn 0.25s ease; }
+        .fade-out { animation: fadeOut 0.2s ease; }
+    </style>
+</head>
+<body>
+    <div id="root" class="root"></div>
+    
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import {
+            getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy
+        } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlI70rKpER3vn14qPF60hsm2ugDYgNeSM",
+            authDomain: "aq-teste.firebaseapp.com",
+            projectId: "aq-teste",
+            storageBucket: "aq-teste.firebasestorage.app",
+            messagingSenderId: "722068060447",
+            appId: "1:722068060447:web:4803f80ba50daa4f04982a",
+        };
+        
+        const firebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(firebaseApp);
+        
+        const questions = [
+            { id: 1,  text: "Eu prefiro fazer as coisas com os outros, em vez de sozinho.", reverse: true },
+            { id: 2,  text: "Eu prefiro fazer as coisas da mesma maneira sempre.", reverse: false },
+            { id: 3,  text: "Se eu tentar imaginar algo, acho que é muito fácil criar uma imagem em minha mente.", reverse: true },
+            { id: 4,  text: "Eu frequentemente fico tão fortemente concentrado em uma coisa que eu ignoro outras coisas.", reverse: false },
+            { id: 5,  text: "Costumo observar pequenos sons quando os outros não os percebem.", reverse: false },
+            { id: 6,  text: "Eu costumo observar placas de carros, números ou sequências similares de informações.", reverse: false },
+            { id: 7,  text: "Outras pessoas frequentemente me corrigem, dizendo que o que falo é falta de educação, mesmo quando eu acho que é educado.", reverse: false },
+            { id: 8,  text: "Quando eu estou lendo uma história, eu posso facilmente imaginar o que os personagens estão fazendo.", reverse: true },
+            { id: 9,  text: "Sou fascinado por datas.", reverse: false },
+            { id: 10, text: "Em um grupo social, eu posso facilmente manter conversação com diferentes pessoas.", reverse: true },
+            { id: 11, text: "Acho fácil conviver socialmente.", reverse: true },
+            { id: 12, text: "Eu percebo detalhes que outros não percebem tão facilmente.", reverse: false },
+            { id: 13, text: "Prefiro ir a uma biblioteca do que uma festa.", reverse: false },
+            { id: 14, text: "Acho inventar histórias algo muito fácil.", reverse: true },
+            { id: 15, text: "Sou atraído mais fortemente para as pessoas do que para coisas.", reverse: true },
+            { id: 16, text: "Quando tenho interesse muito forte num determinado assunto, fico muito chateado se não consigo levar adiante meus pensamentos sobre este assunto.", reverse: false },
+            { id: 17, text: "Eu gosto de fofoca social.", reverse: true },
+            { id: 18, text: "Quando eu falo, nem sempre é fácil para os outros entenderem claramente o que quero dizer.", reverse: false },
+            { id: 19, text: "Sou fascinado por números.", reverse: false },
+            { id: 20, text: "Quando eu estou lendo uma história, acho difícil entender as intenções dos personagens.", reverse: false },
+            { id: 21, text: "Eu particularmente não gosto de ler ficção.", reverse: false },
+            { id: 22, text: "Acho que é difícil fazer novos amigos.", reverse: false },
+            { id: 23, text: "Percebo padrões nas coisas o tempo todo.", reverse: false },
+            { id: 24, text: "Prefiro ir ao teatro do que um museu.", reverse: true },
+            { id: 25, text: "Eu não me chateio se minha rotina diária é perturbada.", reverse: true },
+            { id: 26, text: "Eu frequentemente tenho dificuldade em manter uma conversa.", reverse: false },
+            { id: 27, text: "Consigo facilmente 'ler nas entrelinhas' quando alguém está falando comigo.", reverse: true },
+            { id: 28, text: "Eu costumo me concentrar mais numa imagem por inteiro do que nos pequenos detalhes.", reverse: true },
+            { id: 29, text: "Eu não sou muito bom em lembrar números de telefone.", reverse: true },
+            { id: 30, text: "Eu não costumo perceber pequenas mudanças em uma situação ou na aparência de uma pessoa.", reverse: true },
+            { id: 31, text: "Eu percebo se alguém que está me ouvindo está ficando entediado.", reverse: true },
+            { id: 32, text: "Acho fácil fazer mais de uma coisa ao mesmo tempo.", reverse: true },
+            { id: 33, text: "Quando eu falo ao telefone, tenho dificuldade de saber quando é a minha vez de falar.", reverse: false },
+            { id: 34, text: "Eu gosto de fazer as coisas de forma espontânea.", reverse: true },
+            { id: 35, text: "Muitas vezes sou o último a entender uma piada.", reverse: false },
+            { id: 36, text: "Consigo perceber o que uma pessoa está pensando ou sentindo só de olhar para seu rosto.", reverse: true },
+            { id: 37, text: "Se houver uma interrupção, eu posso voltar para o que eu estava fazendo muito rapidamente.", reverse: true },
+            { id: 38, text: "Eu sou bom em conversa social.", reverse: true },
+            { id: 39, text: "Muitas vezes as pessoas me dizem que eu continuo falando repetidamente sobre a mesma coisa.", reverse: false },
+            { id: 40, text: "Quando eu era jovem, eu gostava de jogar jogos de imaginação com outras crianças.", reverse: true },
+            { id: 41, text: "Eu gosto de coletar informações sobre categorias de coisas (por exemplo, os tipos de carros, pássaros, trens, plantas).", reverse: false },
+            { id: 42, text: "Para mim, é muito difícil imaginar-me sendo outra pessoa.", reverse: false },
+            { id: 43, text: "Eu gosto de planejar cuidadosamente qualquer atividade que eu irei participar.", reverse: false },
+            { id: 44, text: "Gosto de ocasiões (reuniões) sociais.", reverse: true },
+            { id: 45, text: "Acho difícil detectar as reais intenções das pessoas.", reverse: false },
+            { id: 46, text: "Situações novas me deixam ansioso.", reverse: false },
+            { id: 47, text: "Eu gosto de conhecer novas pessoas.", reverse: true },
+            { id: 48, text: "Eu sou um bom diplomata.", reverse: true },
+            { id: 49, text: "Eu não sou muito bom em lembrar da data de nascimento das pessoas.", reverse: true },
+            { id: 50, text: "Gosto de brincar de jogos imaginários com as crianças.", reverse: true },
+        ];
+        
+        const OPTIONS = [
+            { label: "Concordo definitivamente", value: "CD" },
+            { label: "Concordo um pouco",        value: "CP" },
+            { label: "Discordo um pouco",        value: "DP" },
+            { label: "Discordo definitivamente", value: "DD" },
+        ];
+        
+        function scoreAnswer(q, answer) {
+            if (!answer) return 0;
+            const agrees    = answer === "CD" || answer === "CP";
+            const disagrees = answer === "DD" || answer === "DP";
+            if (!q.reverse && agrees)    return 1;
+            if ( q.reverse && disagrees) return 1;
+            return 0;
+        }
+        
+        function calcTotal(answers) {
+            return questions.reduce((sum, q) => sum + scoreAnswer(q, answers[q.id]), 0);
+        }
+        
+        const app = {
+            page: 'welcome',
+            name: '',
+            email: '',
+            answers: {},
+            current: 0,
+            anim: 'in',
+            showAdmin: false,
+            adminPass: '',
+            responses: [],
+            selected: null,
+            loading: false,
+            PASS: 'daisy2024',
+            
+            setState(updates) {
+                Object.assign(this, updates);
+                this.render();
+            },
+            
+            render() {
+                const root = document.getElementById('root');
+                root.innerHTML = '';
+                
+                if (this.page === 'welcome') return this.renderWelcome();
+                if (this.page === 'name') return this.renderName();
+                if (this.page === 'questions') return this.renderQuestions();
+                if (this.page === 'result') return this.renderResult();
+                if (this.page === 'admin') return this.renderAdmin();
+            },
+            
+            renderWelcome() {
+                const root = document.getElementById('root');
+                root.innerHTML = `
+                    <div class="welcome">
+                        <div class="card welcome-inner">
+                            <div class="logo">AQ</div>
+                            <h1>Quociente do Espectro do Autismo</h1>
+                            <p class="subtitle">Este questionário mede o grau de traços autísticos em adultos. Não é um autodiagnóstico — seu objetivo é identificar traços que podem estar ligados ao comportamento autista.</p>
+                            <p class="note">São 50 perguntas. Responda com sinceridade.</p>
+                            <button class="btn" onclick="app.setState({page: 'name'})">Iniciar questionário →</button>
+                        </div>
+                    </div>
+                    <div class="admin-link">
+                        ${!this.showAdmin 
+                            ? `<button class="btn ghost-btn" onclick="app.setState({showAdmin: true})">Acesso profissional</button>`
+                            : `
+                                <input type="password" class="btn admin-input" id="adminPass" placeholder="Senha" value="${this.adminPass}"
+                                    onkeydown="if(event.key==='Enter') app.checkAdmin()"
+                                    onchange="app.setState({adminPass: this.value})" />
+                                <button class="btn btn-small" onclick="app.checkAdmin()">Entrar</button>
+                            `
+                        }
+                    </div>
+                `;
+            },
+            
+            checkAdmin() {
+                if (this.adminPass === this.PASS) {
+                    this.loadResponses();
+                    this.setState({page: 'admin'});
+                } else {
+                    alert("Senha incorreta.");
+                    this.setState({adminPass: ''});
+                }
+            },
+            
+            renderName() {
+                const root = document.getElementById('root');
+                root.innerHTML = `
+                    <div class="welcome">
+                        <div class="card welcome-inner">
+                            <h2>Identificação</h2>
+                            <p class="subtitle">Informe seus dados para que o profissional possa acompanhar sua resposta.</p>
+                            <input type="text" placeholder="Seu nome completo" value="${this.name}"
+                                onchange="app.setState({name: this.value})" />
+                            <input type="email" placeholder="Seu e-mail (opcional)" value="${this.email}"
+                                onchange="app.setState({email: this.value})" />
+                            <button class="btn" style="opacity: ${this.name.trim() ? '1' : '0.4'}" 
+                                ${!this.name.trim() ? 'disabled' : ''}
+                                onclick="app.setState({page: 'questions'})">
+                                Continuar →
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            renderQuestions() {
+                const q = questions[this.current];
+                const progress = (this.current / questions.length) * 100;
+                const root = document.getElementById('root');
+                
+                root.innerHTML = `
+                    <div class="page">
+                        <div class="top-bar">
+                            <div class="progress-track">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <span class="progress-text">${this.current + 1} / ${questions.length}</span>
+                        </div>
+                        <div class="card ${this.anim === 'in' ? 'fade-in' : 'fade-out'}">
+                            <div class="q-number">Pergunta ${q.id}</div>
+                            <p class="q-text">${q.text}</p>
+                            <div class="option-grid">
+                                ${OPTIONS.map(opt => `
+                                    <button class="option-btn ${this.answers[q.id] === opt.value ? 'selected' : ''}"
+                                        onclick="app.chooseAnswer('${opt.value}')">
+                                        ${opt.label}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            ${this.current > 0 ? `<button class="back-btn" onclick="app.goBack()">← Voltar</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            },
+            
+            chooseAnswer(val) {
+                const q = questions[this.current];
+                this.answers[q.id] = val;
+                
+                if (this.current < questions.length - 1) {
+                    this.setState({anim: 'out', current: this.current + 1});
+                } else {
+                    this.setState({page: 'result'});
+                }
+            },
+            
+            goBack() {
+                if (this.current > 0) {
+                    this.setState({anim: 'out', current: this.current - 1});
+                }
+            },
+            
+            renderResult() {
+                const score = calcTotal(this.answers);
+                const level = score >= 32
+                    ? { label: "Acima do limiar de referência", color: "#e05c5c", bg: "#fff0f0" }
+                    : score >= 26
+                    ? { label: "Atenção — próximo do limiar",   color: "#d4800a", bg: "#fff8ec" }
+                    : { label: "Abaixo da média de referência", color: "#2e8b57", bg: "#eef8f2" };
+                
+                const root = document.getElementById('root');
+                root.innerHTML = `
+                    <div class="page">
+                        <div class="card" style="text-align: center;">
+                            <div class="score-circle">
+                                <span class="score-num">${score}</span>
+                                <span class="score-label">pontos</span>
+                            </div>
+                            <div class="level-badge" style="background: ${level.bg}; color: ${level.color};">${level.label}</div>
+                            <p class="result-name">Olá, <strong>${this.name}</strong>!</p>
+                            <p class="result-text">A média populacional é <strong>16,4 pontos</strong>. Pontuações acima de <strong>32</strong> indicam que uma avaliação profissional é recomendada.</p>
+                            <p class="result-note" style="color: ${score >= 32 ? '#e05c5c' : '#888'}">
+                                ${score >= 32 
+                                    ? '⚠ Recomendamos conversar com um profissional especializado.' 
+                                    : 'Sua pontuação está dentro do intervalo típico da população geral.'}
+                            </p>
+                            <p style="font-size: 0.85rem; margin-top: 16px; color: #2e8b57;">✓ Respostas sendo registradas...</p>
+                            <div style="display:flex; gap: 10px; justify-content:center; flex-wrap: wrap; margin-top: 24px;">
+                                <button class="btn" onclick="app.exportPdf()">Exportar para PDF</button>
+                                <button class="btn" style="margin-top: 0;" onclick="app.setState({page: 'welcome', current: 0, answers: {}, name: '', email: ''})">Responder novamente</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.saveResponses(score);
+            },
+            
+            async saveResponses(score) {
+                try {
+                    await addDoc(collection(db, "respostas"), {
+                        name: this.name,
+                        email: this.email,
+                        score: score,
+                        answers: this.answers,
+                        date: new Date().toISOString(),
+                    });
+                } catch (e) { console.error(e); }
+            },
+            
+            exportPdf() {
+                window.print();
+            },
+            
+            async loadResponses() {
+                this.setState({loading: true});
+                try {
+                    const q = query(collection(db, "respostas"), orderBy("date", "desc"));
+                    const snap = await getDocs(q);
+                    this.setState({
+                        responses: snap.docs.map(d => ({ docId: d.id, ...d.data() })),
+                        loading: false
+                    });
+                } catch (e) { console.error(e); this.setState({loading: false}); }
+            },
+            
+            renderAdmin() {
+                if (this.selected) return this.renderAdminDetail();
+                
+                const avg = this.responses.length 
+                    ? (this.responses.reduce((s, r) => s + r.score, 0) / this.responses.length).toFixed(1) 
+                    : "—";
+                const above32 = this.responses.filter(r => r.score >= 32).length;
+                
+                const root = document.getElementById('root');
+                root.innerHTML = `
+                    <div class="page">
+                        <div class="card" style="max-width: 700px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                                <h2 style="margin: 0;">Painel de Respostas</h2>
+                                <button class="back-btn" onclick="app.setState({page: 'welcome', showAdmin: false, adminPass: ''})">← Sair</button>
+                            </div>
+                            <div class="stats-row">
+                                <div class="stat-box"><span class="stat-num">${this.responses.length}</span><span class="stat-lbl">Respondentes</span></div>
+                                <div class="stat-box"><span class="stat-num">${avg}</span><span class="stat-lbl">Média</span></div>
+                                <div class="stat-box"><span class="stat-num" style="color: #e05c5c;">${above32}</span><span class="stat-lbl">Acima de 32</span></div>
+                            </div>
+                            ${this.loading ? '<p style="color: #aaa; text-align: center;">Carregando…</p>' : ''}
+                            ${!this.loading && this.responses.length === 0 ? '<p style="color: #aaa; text-align: center;">Nenhuma resposta registrada yet.</p>' : ''}
+                            <div class="resp-list">
+                                ${this.responses.map(r => `
+                                    <div class="resp-row" onclick="app.setState({selected: ${JSON.stringify(r).replace(/"/g, '&quot;')}})">
+                                        <div>
+                                            <div class="resp-name">${r.name}</div>
+                                            <div class="resp-date">${new Date(r.date).toLocaleString('pt-BR')}</div>
+                                        </div>
+                                        <div class="resp-score" style="background: ${r.score >= 32 ? '#fff0f0' : '#eef8f2'}; color: ${r.score >= 32 ? '#e05c5c' : '#2e8b57'};">
+                                            ${r.score} pts
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="back-btn" style="margin-top: 16px;" onclick="app.loadResponses()">↻ Atualizar</button>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            renderAdminDetail() {
+                const r = this.selected;
+                const root = document.getElementById('root');
+                
+                root.innerHTML = `
+                    <div class="page">
+                        <div class="card" style="max-width: 640px;">
+                            <button class="back-btn" onclick="app.setState({selected: null})">← Voltar à lista</button>
+                            <h2 style="margin-top: 12px; margin-bottom: 8px;">${r.name}</h2>
+                            <p style="color: #888; font-size: 0.85rem; margin-bottom: 4px;">
+                                ${r.email || "sem e-mail"} · ${new Date(r.date).toLocaleString("pt-BR")}
+                            </p>
+                            <div class="level-badge" style="font-size: 1rem; margin-bottom: 20px; background: ${r.score >= 32 ? '#fff0f0' : '#eef8f2'}; color: ${r.score >= 32 ? '#e05c5c' : '#2e8b57'};">
+                                Pontuação: ${r.score} / 50
+                            </div>
+                            <div class="detail-grid">
+                                ${questions.map(q => {
+                                    const ans = r.answers[q.id];
+                                    const pt = scoreAnswer(q, ans);
+                                    return `
+                                        <div class="detail-row" style="background: ${pt ? '#fff8ec' : 'transparent'}">
+                                            <span class="detail-num">${q.id}</span>
+                                            <span class="detail-text">${q.text}</span>
+                                            <span class="detail-ans" style="color: ${pt ? '#d4800a' : '#bbb'}">
+                                                ${OPTIONS.find(o => o.value === ans)?.label || "—"}
+                                            </span>
+                                            ${pt ? '<span class="dot">●</span>' : '<span style="width: 14px;"></span>'}
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                            <button class="btn btn-danger" style="margin-top: 24px;" onclick="app.deleteEntry('${r.docId}')">
+                                Excluir esta resposta
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            async deleteEntry(docId) {
+                if (!confirm("Excluir esta resposta?")) return;
+                try {
+                    await deleteDoc(doc(db, "respostas", docId));
+                    await this.loadResponses();
+                    this.setState({selected: null});
+                } catch (e) { console.error(e); }
+            }
+        };
+        
+        app.render();
+        window.app = app;
+    </script>
+</body>
+</html>
