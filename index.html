@@ -23,12 +23,31 @@
             position: relative;
         }
         
-        .welcome, .page {
+        .welcome {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem 1rem;
+        }
+        
+        .page {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 5vh 1rem 10vh;
+        }
+        
+        .page-inner {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 0;
         }
         
         .card {
@@ -38,6 +57,24 @@
             border-radius: 16px;
             padding: 2rem;
             box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        
+        .bottom-bar {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 5vh;
+            width: min(600px, calc(100% - 2rem));
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .top-bar {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 24px;
         }
         
         .welcome-inner {
@@ -523,24 +560,26 @@
                 
                 root.innerHTML = `
                     <div class="page">
-                        <div class="top-bar">
+                        <div class="page-inner">
+                            <div class="card ${this.anim === 'in' ? 'fade-in' : 'fade-out'}">
+                                <div class="q-number">Pergunta ${q.id}</div>
+                                <p class="q-text">${q.text}</p>
+                                <div class="option-grid">
+                                    ${OPTIONS.map(opt => `
+                                        <button class="option-btn ${this.answers[q.id] === opt.value ? 'selected' : ''}"
+                                            onclick="app.chooseAnswer('${opt.value}')">
+                                            ${opt.label}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                                ${this.current > 0 ? `<button class="back-btn" onclick="app.goBack()">← Voltar</button>` : ''}
+                            </div>
+                        </div>
+                        <div class="bottom-bar">
                             <div class="progress-track">
                                 <div class="progress-fill" style="width: ${progress}%"></div>
                             </div>
                             <span class="progress-text">${this.current + 1} / ${questions.length}</span>
-                        </div>
-                        <div class="card ${this.anim === 'in' ? 'fade-in' : 'fade-out'}">
-                            <div class="q-number">Pergunta ${q.id}</div>
-                            <p class="q-text">${q.text}</p>
-                            <div class="option-grid">
-                                ${OPTIONS.map(opt => `
-                                    <button class="option-btn ${this.answers[q.id] === opt.value ? 'selected' : ''}"
-                                        onclick="app.chooseAnswer('${opt.value}')">
-                                        ${opt.label}
-                                    </button>
-                                `).join('')}
-                            </div>
-                            ${this.current > 0 ? `<button class="back-btn" onclick="app.goBack()">← Voltar</button>` : ''}
                         </div>
                     </div>
                 `;
