@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQ Questionário - Quociente do Espectro do Autismo</title>
-    <h1 style="text-align: center;  margin: 20">Danielle Rodrigues Bertolini</h1>
-    <h2 style="text-align: center; margin: 22">Psicóloga</h2>
+    <h1 ID="nome"; style="text-align: center;  margin: 20">Danielle Rodrigues Bertolini</h1>
+    <h2 ID="profissao"; style="text-align: center; margin:0;0;0">Psicóloga</h2>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,12 @@
             box-sizing: border-box;
         }
 
-   
+        #nome{
+            font-size: 2.5rem;
+            color: #1a1a2e;
+            margin-top: 5%;
+            margin-bottom:0;
+        }
         
         body {
             font-family: 'Georgia', serif;
@@ -32,7 +37,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem;
+            padding: 1rem 1rem;
+            padding-bottom: 25vh;
         }
         
         .page {
@@ -84,6 +90,9 @@
         .welcome-inner {
             text-align: center;
             max-width: 480px;
+            background-image:url('Danielle.png');
+            background-size: cover;
+            background-position: center;
         }
         
         .logo {
@@ -155,7 +164,7 @@
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .btn-danger { background: #e05c5c; }
         .btn-small { padding: 6px 16px; font-size: 0.8rem; }
-        .ghost-btn { background: none; border: 1px solid #ccc; color: #aaa; padding: 6px 16px; border-radius: 20px; }
+        .ghost-btn { background: none; border: 1px solid #ccc; color: #aaa; padding: 6px 16px 6px; border-radius: 20px; }
         
         .top-bar {
             width: 100%;
